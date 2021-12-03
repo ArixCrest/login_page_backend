@@ -23,29 +23,10 @@ app.post("/",(req,res)=>{
             const db = client.db("data");
             console.log("connected to database ",db.databaseName);
             const collection = await db.collections();
-            //collection.forEach(c=>console.log(c.collectionName));
             const phones = db.collection("phones");
-            /*const insertcursor = await phones.insertMany([
-                {
-                    "phone" : "9102162522",
-                    "otp" : "123456"
-
-                },
-                {
-                    "phone" : "7004147665",
-                    "otp" : "654321"
-                }
-            ])
-            console.log(insertcursor.insertedCount);*/
-            //const searchCursor = await employees.find({"name": "Hussein"});
             if(otp=="0"){
                 const searchCursor = await phones.count({"phone": phone},{limit:1});
                 var a = 0;
-                console.log("in");
-                // while (await searchCursor.hasNext()){
-                //     console.log(await searchCursor.next())  
-                //     a= a+1; 
-                // }
                 if(searchCursor==0){
                     res.send("unsuccessful")
                 }else{
@@ -58,14 +39,8 @@ app.post("/",(req,res)=>{
                     res.send(OTP);
                 }
             }else{
-                const searchCursor = await phones.find({"phone": phone, "otp" : otp});
-                var a = 0;
-                while (await searchCursor.hasNext()){
-                    console.log(await searchCursor.next())  
-                    a= a+1;
-                }
-                //console.log(a);
-                if(a==0){
+                const searchCursor = await phones.count({"phone": phone, "otp" : otp},{limit: 1});
+                if(searchCursor==0){
                     res.send("unsuccessful");
                 }else{
                     res.send("success");
